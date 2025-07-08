@@ -65,7 +65,7 @@ df["income_raw"] = (
 income_map = {
     "Under $20,000":                 "Low (<$40k)",
     "$20,000 – $39,999":             "Low (<$40k)",
-    "$20,000 - $39,999":             "Low (<$40k)",   # handle en-dash or hyphen
+    "$20,000 - $39,999":             "Low (<$40k)", 
     "$40,000 – $59,999":             "Middle ($40k–$99k)",
     "$40,000 - $59,999":             "Middle ($40k–$99k)",
     "$60,000 – $79,999":             "Middle ($40k–$99k)",
@@ -83,7 +83,6 @@ income_map = {
 df["income_bucket"] = df["income_raw"].map(income_map).fillna("Skipped/NA")
 
 # 6.  Recode barrier items  (Selected=1, else 0)
-# ------------------------------------------------------------------
 for col in BARRIER_COLS:
     df[col] = df[col].map({"(1) Selected": 1,
                            "(0) Not selected": 0}).fillna(0).astype(int)
@@ -93,7 +92,7 @@ for col in BARRIER_COLS:
 print(df.head())
 
 
-# 1️⃣  % of respondents selecting each barrier  ───────────
+# % of respondents selecting each barrier
 #     A) by region
 barrier_pct_region = (
     df.groupby("region")[BARRIER_COLS]
@@ -110,7 +109,7 @@ barrier_pct_income = (
       .round(1)
 )
 
-# 2️⃣  Average number of barriers per respondent ──────────
+# 2️⃣  Average number of barriers per respondent
 mean_barriers_by_region = (
     df.assign(n_barriers=df[BARRIER_COLS].sum(axis=1))
       .groupby("region")["n_barriers"]
@@ -119,12 +118,12 @@ mean_barriers_by_region = (
       .to_frame("avg_barriers")
 )
 
-# 3️⃣  Save to disk so Tableau / Power BI / Excel can ingest
+#  Save to disk so Tableau / Power BI / Excel can ingest
 barrier_pct_region.to_csv("barrier_pct_by_region.csv")
 barrier_pct_income.to_csv("barrier_pct_by_income.csv")
 mean_barriers_by_region.to_csv("avg_barriers_by_region.csv")
 
-print("✔️ 3 summary files written:")
+print("   3 summary files written:")
 print("   • barrier_pct_by_region.csv")
 print("   • barrier_pct_by_income.csv")
 print("   • avg_barriers_by_region.csv")
