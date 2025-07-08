@@ -109,7 +109,7 @@ barrier_pct_income = (
       .round(1)
 )
 
-# 2️⃣  Average number of barriers per respondent
+#Average number of barriers per respondent
 mean_barriers_by_region = (
     df.assign(n_barriers=df[BARRIER_COLS].sum(axis=1))
       .groupby("region")["n_barriers"]
